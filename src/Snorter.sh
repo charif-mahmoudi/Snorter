@@ -484,7 +484,7 @@ function last_steps() {
 
 	echo -ne "\n\t${YELLOW}[!] IMPORTANT:${NOCOLOR} Would you like to enable ${BOLD}Emerging Threats${NOCOLOR} and ${BOLD}Community${NOCOLOR} rules for detection? [Y/n] "
 
-	OPTION=y
+	OPTION=n
 	case "$OPTION" in
 		[yY][eE][sS]|[yY])
 			echo "# Community and Emerging Rules enabled" >> /etc/snort/snort.conf
