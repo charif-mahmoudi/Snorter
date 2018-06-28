@@ -90,13 +90,13 @@ function snort_edit() {
 	echo -ne "\n\t${YELLOW}[!] INFO:${NOCOLOR} Now it's time to edit the ${BOLD}SNORT${NOCOLOR} configuration file.\n\n"
 	echo -ne "\n\t${CYAN}[i] INFO:${NOCOLOR} Add your ${BOLD}HOME_NET${NOCOLOR} address [Ex: 192.168.1.0/24]"
 	echo -ne "\n\t${YELLOW}[!] WARNING:${NOCOLOR} Press ${BOLD}ENTER${NOCOLOR} to continue. "
-	read -n 1 -s
-	sudo vim /etc/snort/snort.conf -c "/ipvar HOME_NET"
+#	read -n 1 -s
+#	sudo vim /etc/snort/snort.conf -c "/ipvar HOME_NET"
 
 	echo -ne "\n\t${CYAN}[i] INFO:${NOCOLOR} Add your ${BOLD}EXTERNAL_NET${NOCOLOR} address [Ex: !\$HOME_NET]"
 	echo -ne "\n\t${YELLOW}[!] WARNING:${NOCOLOR} Press ${BOLD}ENTER${NOCOLOR} to continue. "
-	read -n 1 -s
-	sudo vim /etc/snort/snort.conf -c "/ipvar EXTERNAL_NET"
+#	read -n 1 -s
+#	sudo vim /etc/snort/snort.conf -c "/ipvar EXTERNAL_NET"
 
 	echo -ne "\n\t${CYAN}[i] INFO:${NOCOLOR} Adding ${BOLD}RULE_PATH${NOCOLOR} to snort.conf file"
 	sudo sed -i 's/RULE_PATH\ \.\.\//RULE_PATH\ \/etc\/snort\//g' /etc/snort/snort.conf
@@ -112,7 +112,7 @@ function snort_edit() {
 
 	while true; do
 		echo -ne "\n\t${YELLOW}[!] WARNING:${NOCOLOR} Unified2 output configured. Configure another output?\n\t\t${YELLOW}1${NOCOLOR} - ${BOLD}CSV${NOCOLOR} output\n\t\t${YELLOW}2${NOCOLOR} - ${BOLD}TCPdump${NOCOLOR} output\n\t\t${YELLOW}3${NOCOLOR} - ${BOLD}CSV${NOCOLOR} and ${BOLD}TCPdump${NOCOLOR} output\n\t\t${YELLOW}4${NOCOLOR} - ${BOLD}None${NOCOLOR}\n\n\tOption [1-4]: "
-		read OPTION
+		OPTION=1
 		case $OPTION in
 			1 )
 				echo -ne "\n\t${YELLOW}[!] WARNING:${NOCOLOR} ${BOLD}CSV${NOCOLOR} output will be configured\n"
@@ -149,8 +149,8 @@ function snort_test() {
 
 	echo -ne "\n\t${YELLOW}[!] WARNING:${NOCOLOR} Attempting to test ${BOLD}ICMP${NOCOLOR} rule in ${BOLD}$INTERFACE${NOCOLOR}. Send a PING to your ${BOLD}SNORT${NOCOLOR} machine. Press ${BOLD}Ctrl+C${NOCOLOR} once and wait few seconds to stop the process...\n "
 	echo -ne "\n\t${YELLOW}[!] WARNING:${NOCOLOR} Press ${BOLD}ENTER${NOCOLOR} to continue. "
-	read -n 1 -s
-	sudo snort -A console -q -u snort -g snort -c /etc/snort/snort.conf -i $INTERFACE
+#	read -n 1 -s
+	sudo snort -A console -q -u snort -g snort -c /etc/snort/snort.conf -i ens3
 	killall -9 snort
 
 }
@@ -159,7 +159,7 @@ function barnyard2_ask() {
 
 	while true; do
 		echo -ne "\n\t${YELLOW}[!] IMPORTANT:${NOCOLOR} Would you like to install ${BOLD}BARNYARD2${NOCOLOR}? [Y/n] "
-		read OPTION
+		OPTION=y
 		case $OPTION in
 			Y|y )
 				barnyard2_install
@@ -180,11 +180,11 @@ function barnyard2_ask() {
 function barnyard2_install() {
 
 	echo -ne "\n\t${YELLOW}[!] WARNING:${NOCOLOR} Insert new ${BOLD}SNORT${NOCOLOR} Database Password: "
-	read SNORTSQLPASSWORD
+	SNORTSQLPASSWORD=projsdn
 	echo -ne "\n\t${CYAN}[i] INFO:${NOCOLOR} Installing dependencies."
 	echo -ne "\n\t${YELLOW}[!] WARNING:${NOCOLOR} You will be asked for a ${BOLD}password for MySQL${NOCOLOR} service if it isn't installed in the system."
 	echo -ne "\n\t${YELLOW}[!] WARNING:${NOCOLOR} Press ${BOLD}ENTER${NOCOLOR} to continue. "
-	read -n 1 -s
+#	read -n 1 -s
 
 	sudo apt-get install -y --force-yes mysql-server libmysqlclient-dev mysql-client autoconf libtool libdnet checkinstall yagiuda libdnet-dev locate
 
@@ -219,7 +219,7 @@ function barnyard2_install() {
 
 	echo -ne "\n\t${CYAN}[i] INFO:${NOCOLOR} The ${BOLD}SNORT${NOCOLOR} database is going to be created. You will be asked for ${RED}MySQL password 3 times${NOCOLOR}"
 	echo -ne "\n\t${YELLOW}[!] WARNING:${NOCOLOR} Press ${BOLD}ENTER${NOCOLOR} to continue. "
-	read -n 1 -s
+#	read -n 1 -s
 	echo -ne "\n\n"
 
 	sudo /etc/init.d/mysql start > /dev/null 2>&1
@@ -240,7 +240,7 @@ function pulledpork_ask() {
 
 	echo -ne "\n\t${YELLOW}[!] IMPORTANT:${NOCOLOR} Would you like to install ${BOLD}PULLEDPORK${NOCOLOR}? [Y/n] "
 	while true; do
-		read OPTION
+		OPTION=n
 		case $OPTION in
 			Y|y )
 				pulledpork_install
@@ -293,7 +293,7 @@ function pulledpork_edit() {
 
 	while true; do
 		echo -ne "\n\t${YELLOW}[!] IMPORTANT:${NOCOLOR} Would you like to enable ${BOLD}Emerging Threats${NOCOLOR} rules? [Y/n] "
-		read OPTION
+		OPTION=n
 		case $OPTION in
 			Y|y )
 				sudo sed -i "s/#rule_url=https:\/\/rules.emergingthreats.net\//rule_url=https:\/\/rules.emergingthreats.net\//g" /etc/snort/pulledpork.conf
@@ -349,7 +349,7 @@ function service_create() {
 
 	while true; do
 		echo -ne "\n\t${YELLOW}[!] IMPORTANT:${NOCOLOR} Would you like to create a service ${BOLD}snort${NOCOLOR}? [Y/n] "
-		read OPTION
+		OPTION=y
 		case $OPTION in
 			Y|y )
 				service_add
@@ -370,7 +370,7 @@ function service_create() {
 	if [ -f /etc/snort/pulledpork.conf ]; then
 		while true; do
 			echo -ne "\n\t${YELLOW}[!] IMPORTANT:${NOCOLOR} Would you like to download new rules using ${BOLD}PULLEDPORK${NOCOLOR}? [Y/n] "
-			read OPTION
+			OPTION=y
 			case $OPTION in
 				Y|y )
 					sudo /usr/local/bin/pulledpork.pl -c /etc/snort/pulledpork.conf -i disablesid.conf -T -H
@@ -430,7 +430,7 @@ function websnort_ask() {
 
 	echo -ne "\n\t${YELLOW}[!] IMPORTANT:${NOCOLOR} Would you like to install ${BOLD}WEBSNORT${NOCOLOR} for PCAP Analysis? [Y/n] "
 	while true; do
-		read OPTION
+		OPTION=y
 		case $OPTION in
 			Y|y )
 				websnort_install
@@ -459,7 +459,7 @@ function websnort_install() {
 
 	echo -ne "\n\t${YELLOW}[!] IMPORTANT:${NOCOLOR} Would you like to start ${BOLD}WEBSNORT${NOCOLOR} with the system? [Y/n] "
 	while true; do
-		read OPTION
+		OPTION=y
 		case $OPTION in
 			Y|y )
 				echo "sudo websnort -p 80 > /dev/null 2>&1 &" >> $HOME/.bashrc
@@ -484,7 +484,7 @@ function last_steps() {
 
 	echo -ne "\n\t${YELLOW}[!] IMPORTANT:${NOCOLOR} Would you like to enable ${BOLD}Emerging Threats${NOCOLOR} and ${BOLD}Community${NOCOLOR} rules for detection? [Y/n] "
 
-	read OPTION
+	OPTION=y
 	case "$OPTION" in
 		[yY][eE][sS]|[yY])
 			echo "# Community and Emerging Rules enabled" >> /etc/snort/snort.conf
@@ -508,7 +508,7 @@ function system_reboot() {
 
 	while true; do
 		echo -ne "\n\t${YELLOW}[!] IMPORTANT:${NOCOLOR} Would you like to ${BOLD}REBOOT${NOCOLOR} now? [Y/n] "
-		read OPTION
+		OPTION=y
 		case $OPTION in
 			Y|y )
 				echo -ne "\n\t${CYAN}[i] INFO:${NOCOLOR} Rebooting...\n\n"
@@ -539,8 +539,27 @@ function banner() {
 	            )-)_/--( >  	${RED} ╚══════╝${ORANGE}╚═╝  ╚═══╝${YELLOW} ╚═════╝ ${GREEN}╚═╝  ╚═╝${CYAN}   ╚═╝   ${BLUE}╚══════╝${VIOLET}╚═╝  ╚═╝ ${NOCOLOR}
 	           ''''  ''''
 
-	"""
 
+	
+	                                                                                         
+			  ____                                                                           
+			,'  , `.                  ,---,            ,--,   ,---,    ,---,      .--.--.    
+		     ,-+-,.' _ |         ,--,   .'  .' `\         / .`|,`--.' |  .'  .' `\   /  /    '.  
+		  ,-+-. ;   , ||       ,'_ /| ,---.'     \       /' / ;|   :  :,---.'     \ |  :  /`. /  
+		 ,--.'|'   |  ;|  .--. |  | : |   |  .`\  |     /  / .':   |  '|   |  .`\  |;  |  |--`   
+		|   |  ,', |  ':,'_ /| :  . | :   : |  '  |    /  / ./ |   :  |:   : |  '  ||  :  ;_     
+		|   | /  | |  |||  ' | |  . . |   ' '  ;  :   / ./  /  '   '  ;|   ' '  ;  : \  \    `.  
+		'   | :  | :  |,|  | ' |  | | '   | ;  .  |  /  /  /   |   |  |'   | ;  .  |  `----.   \ 
+		;   . |  ; |--' :  | | :  ' ; |   | :  |  ' /  /  /    '   :  ;|   | :  |  '  __ \  \  | 
+		|   : |  | ,    |  ; ' |  | ' '   : | /  ; ;  /  /     |   |  ''   : | /  ;  /  /`--'  / 
+		|   : '  |/     :  | : ;  ; | |   | '` ,/./__;  /      '   :  ||   | '` ,/  '--'.     /  
+		;   | |`-'      '  :  `--'   \;   :  .'  |   : /       ;   |.' ;   :  .'      `--'---'   
+		|   ;/          :  ,      .-./|   ,.'    ;   |/        '---'   |   ,.'                   
+		'---'            `--`----'    '---'      `---'                 '---'                     
+
+	"""
+	
+	
 }
 
 function help_usage() {
